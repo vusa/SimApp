@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="org.simapp.floor">
+    <module_version install_time="1311888426860" last="true" origin="installer" specification_version="1.0">
+        <file crc="1007242763" name="config/Modules/org-simapp-floor.xml"/>
+        <file crc="771139640" name="modules/org-simapp-floor.jar"/>
+    </module_version>
+</module>

@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: org.simapp.colorchooser
+OpenIDE-Module-Localizing-Bundle: org/simapp/colorchooser/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+
