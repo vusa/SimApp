@@ -10,6 +10,7 @@ public class Person extends FloorItem {
     int dirX;
     int dirY;
     private int id;
+    private String name;
 
     public int getId() {
         return id;
@@ -21,7 +22,8 @@ public class Person extends FloorItem {
         dirY = Math.random() < 0.5 ? 1 : -1;
     }
 
-    public Person(PathWay path, int _id) {
+    public Person(PathWay path, int _id, String _name) {
+        name = _name;
         id = _id;
         if (WayOrientation.HORIZONTAL.equals(path.orientation)) {
             setY(path.start.y);
@@ -107,6 +109,20 @@ public class Person extends FloorItem {
 
     @Override
     public String toString() {
-        return "Person id - " + id + "";
+        return name +" (Tag - " + id + ")";
+    }
+
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
     }
 }

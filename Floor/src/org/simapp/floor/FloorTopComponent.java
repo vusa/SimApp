@@ -48,10 +48,9 @@ public class FloorTopComponent extends TopComponent implements ActionListener, C
     private final JButton addPersonBtn = new JButton(NbBundle.getMessage(FloorTopComponent.class, "LBL_AddPerson")); //A button to clear the canvas
     private final JLabel label = new JLabel(NbBundle.getMessage(FloorTopComponent.class, "LBL_Foreground")); //A label for the color chooser
     private final JLabel speedLabel = new JLabel(NbBundle.getMessage(FloorTopComponent.class, "LBL_Speed")); //A label for the brush size slider
-    //private static int speed = 1; 
     private Board board;
     public DataSheetPanel dataSheet;
-    
+
     public FloorTopComponent() {
         initComponents();
         String displayName = NbBundle.getMessage(FloorTopComponent.class, "SimNameFormat");
@@ -88,8 +87,8 @@ public class FloorTopComponent extends TopComponent implements ActionListener, C
         toolbar.add(addPersonBtn);
 
     }
-    
-    public DataSheetPanel getDataSheet(){
+
+    public DataSheetPanel getDataSheet() {
         DataSheetPanel data = new DataSheetPanel();
         data.setSize(400, 480);
         return data;

@@ -3,7 +3,6 @@ package org.simapp.floor;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Label;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -79,9 +78,11 @@ public class Board extends JPanel implements Runnable {
         for (Person p : persons.values()) {
             p.move();
         }
+        
         int selectedId = ((Person) parent.dataSheet.combo.getSelectedItem()).getId();
-        String labelTxt = "Person ID: "+selectedId+" X = " + persons.get(selectedId).getX() + " and Y =" + persons.get(selectedId).getY();
-        parent.dataSheet.liveLbl.setText(labelTxt);
+        Person p = persons.get(selectedId);
+        parent.dataSheet.liveLbl.setText(p.getName() +" is along "+ p.currentPathWay.pathName.toUpperCase());
+        parent.dataSheet.liveLbl2.setText("Person ID: "+selectedId+" X = " + p.getX() + " and Y =" + p.getY());
     }
 
     @Override
@@ -119,34 +120,34 @@ public class Board extends JPanel implements Runnable {
         pathNames = set.toArray(pathNames);
         parent.dataSheet.setLayout(new BoxLayout(parent.dataSheet, BoxLayout.PAGE_AXIS));
         for (int i = 0; i < 10; i++) {
-            persons.put(i, new Person(PATHWAYS.get(pathNames[(int) Math.floor(Math.random() * set.size())]), i));
+            persons.put(i, new Person(PATHWAYS.get(pathNames[(int) Math.floor(Math.random() * set.size())]), i, getPersonName(i)));
         }
         parent.dataSheet.combo.setModel(getComboModel());
     }
 
     private void initPathWays() {
         PATHWAYS = new HashMap<String, PathWay>();
-        PATHWAYS.put("h1", new PathWay(new Coordinates(30, 22), new Coordinates(606, 22), WayOrientation.HORIZONTAL, "v1", "v11"));
-        PATHWAYS.put("h2", new PathWay(new Coordinates(94, 70), new Coordinates(480, 70), WayOrientation.HORIZONTAL, "v2", "v10"));
-        PATHWAYS.put("h3", new PathWay(new Coordinates(158, 118), new Coordinates(480, 118), WayOrientation.HORIZONTAL, "v4", "v10"));
-        PATHWAYS.put("h4", new PathWay(new Coordinates(30, 166), new Coordinates(606, 166), WayOrientation.HORIZONTAL, "v1", "v11"));
-        PATHWAYS.put("h5", new PathWay(new Coordinates(222, 310), new Coordinates(350, 310), WayOrientation.HORIZONTAL, "v6", "v8"));
-        PATHWAYS.put("h6", new PathWay(new Coordinates(415, 310), new Coordinates(606, 310), WayOrientation.HORIZONTAL, "v9", "v11"));
-        PATHWAYS.put("h7", new PathWay(new Coordinates(30, 358), new Coordinates(94, 358), WayOrientation.HORIZONTAL, "v1", "v3"));
-        PATHWAYS.put("h8", new PathWay(new Coordinates(94, 406), new Coordinates(415, 406), WayOrientation.HORIZONTAL, "v3", "v9"));
-        PATHWAYS.put("h9", new PathWay(new Coordinates(30, 454), new Coordinates(94, 454), WayOrientation.HORIZONTAL, "v1", "v3"));
-        PATHWAYS.put("h10", new PathWay(new Coordinates(158, 454), new Coordinates(606, 454), WayOrientation.HORIZONTAL, "v5", "v11"));
-        PATHWAYS.put("v1", new PathWay(new Coordinates(30, 22), new Coordinates(30, 454), WayOrientation.VERTICAL, "h1", "h9"));
-        PATHWAYS.put("v2", new PathWay(new Coordinates(94, 22), new Coordinates(94, 70), WayOrientation.VERTICAL, "h1", "h2"));
-        PATHWAYS.put("v3", new PathWay(new Coordinates(94, 310), new Coordinates(94, 454), WayOrientation.VERTICAL, "", "h9"));
-        PATHWAYS.put("v4", new PathWay(new Coordinates(158, 70), new Coordinates(158, 166), WayOrientation.VERTICAL, "h2", "h4"));
-        PATHWAYS.put("v5", new PathWay(new Coordinates(158, 406), new Coordinates(158, 454), WayOrientation.VERTICAL, "h8", "h10"));
-        PATHWAYS.put("v6", new PathWay(new Coordinates(222, 166), new Coordinates(222, 310), WayOrientation.VERTICAL, "h4", "h5"));
-        PATHWAYS.put("v7", new PathWay(new Coordinates(288, 310), new Coordinates(288, 454), WayOrientation.VERTICAL, "h5", "h10"));
-        PATHWAYS.put("v8", new PathWay(new Coordinates(350, 310), new Coordinates(350, 406), WayOrientation.VERTICAL, "h5", "h8"));
-        PATHWAYS.put("v9", new PathWay(new Coordinates(415, 166), new Coordinates(415, 454), WayOrientation.VERTICAL, "h4", "h10"));
-        PATHWAYS.put("v10", new PathWay(new Coordinates(480, 22), new Coordinates(480, 166), WayOrientation.VERTICAL, "h1", "h4"));
-        PATHWAYS.put("v11", new PathWay(new Coordinates(606, 22), new Coordinates(606, 454), WayOrientation.VERTICAL, "h1", "h10"));
+        PATHWAYS.put("h1", new PathWay("h1", new Coordinates(30, 22), new Coordinates(606, 22), WayOrientation.HORIZONTAL, "v1", "v11"));
+        PATHWAYS.put("h2", new PathWay("h2", new Coordinates(94, 70), new Coordinates(480, 70), WayOrientation.HORIZONTAL, "v2", "v10"));
+        PATHWAYS.put("h3", new PathWay("h3", new Coordinates(158, 118), new Coordinates(480, 118), WayOrientation.HORIZONTAL, "v4", "v10"));
+        PATHWAYS.put("h4", new PathWay("h4", new Coordinates(30, 166), new Coordinates(606, 166), WayOrientation.HORIZONTAL, "v1", "v11"));
+        PATHWAYS.put("h5", new PathWay("h5", new Coordinates(222, 310), new Coordinates(350, 310), WayOrientation.HORIZONTAL, "v6", "v8"));
+        PATHWAYS.put("h6", new PathWay("h6", new Coordinates(415, 310), new Coordinates(606, 310), WayOrientation.HORIZONTAL, "v9", "v11"));
+        PATHWAYS.put("h7", new PathWay("h7", new Coordinates(30, 358), new Coordinates(94, 358), WayOrientation.HORIZONTAL, "v1", "v3"));
+        PATHWAYS.put("h8", new PathWay("h8", new Coordinates(94, 406), new Coordinates(415, 406), WayOrientation.HORIZONTAL, "v3", "v9"));
+        PATHWAYS.put("h9", new PathWay("h9", new Coordinates(30, 454), new Coordinates(94, 454), WayOrientation.HORIZONTAL, "v1", "v3"));
+        PATHWAYS.put("h10", new PathWay("h10", new Coordinates(158, 454), new Coordinates(606, 454), WayOrientation.HORIZONTAL, "v5", "v11"));
+        PATHWAYS.put("v1", new PathWay("v1", new Coordinates(30, 22), new Coordinates(30, 454), WayOrientation.VERTICAL, "h1", "h9"));
+        PATHWAYS.put("v2", new PathWay("v2", new Coordinates(94, 22), new Coordinates(94, 70), WayOrientation.VERTICAL, "h1", "h2"));
+        PATHWAYS.put("v3", new PathWay("v3", new Coordinates(94, 310), new Coordinates(94, 454), WayOrientation.VERTICAL, "", "h9"));
+        PATHWAYS.put("v4", new PathWay("v4", new Coordinates(158, 70), new Coordinates(158, 166), WayOrientation.VERTICAL, "h2", "h4"));
+        PATHWAYS.put("v5", new PathWay("v5", new Coordinates(158, 406), new Coordinates(158, 454), WayOrientation.VERTICAL, "h8", "h10"));
+        PATHWAYS.put("v6", new PathWay("v6", new Coordinates(222, 166), new Coordinates(222, 310), WayOrientation.VERTICAL, "h4", "h5"));
+        PATHWAYS.put("v7", new PathWay("v7", new Coordinates(288, 310), new Coordinates(288, 454), WayOrientation.VERTICAL, "h5", "h10"));
+        PATHWAYS.put("v8", new PathWay("v8", new Coordinates(350, 310), new Coordinates(350, 406), WayOrientation.VERTICAL, "h5", "h8"));
+        PATHWAYS.put("v9", new PathWay("v9", new Coordinates(415, 166), new Coordinates(415, 454), WayOrientation.VERTICAL, "h4", "h10"));
+        PATHWAYS.put("v10", new PathWay("v10", new Coordinates(480, 22), new Coordinates(480, 166), WayOrientation.VERTICAL, "h1", "h4"));
+        PATHWAYS.put("v11", new PathWay("v11", new Coordinates(606, 22), new Coordinates(606, 454), WayOrientation.VERTICAL, "h1", "h10"));
     }
 
     private void initSensors() {
@@ -157,5 +158,10 @@ public class Board extends JPanel implements Runnable {
 
     private ComboBoxModel getComboModel() {
         return new DefaultComboBoxModel(persons.values().toArray());
+    }
+    
+    private String getPersonName(int i){
+        String [] names = new String[]{"John", "James", "Sipho", "Kevin", "Mark", "Dudu", "Dumi", "Gugu", "Thembi", "Dan"};
+        return names[i%names.length];
     }
 }
