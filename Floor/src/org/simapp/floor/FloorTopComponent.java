@@ -42,7 +42,7 @@ iconBase = "/org/netbeans/floor/new_icon.png", persistenceType = TopComponent.PE
     "SimNameFormat=New Sim {0}"})
 public class FloorTopComponent extends TopComponent implements ActionListener, ChangeListener {
 
-    private final JSlider personSpeedSlider = new JSlider(1, 24); //A slider to set the brush size
+    private final JSlider personSpeedSlider = new JSlider(0, 35); //A slider to set the brush size
     private final JToolBar toolbar = new JToolBar(); //The toolbar
     private final ColorChooser color = new ColorChooser(); //Our color chooser component from the ColorChooser library
     private final JButton addPersonBtn = new JButton(NbBundle.getMessage(FloorTopComponent.class, "LBL_AddPerson")); //A button to clear the canvas
@@ -106,6 +106,6 @@ public class FloorTopComponent extends TopComponent implements ActionListener, C
 
     @Override
     public void stateChanged(ChangeEvent e) {
-        //change sprite's speed - loop thru person list
+        board.DELAY = (40 - personSpeedSlider.getValue());
     }
 }

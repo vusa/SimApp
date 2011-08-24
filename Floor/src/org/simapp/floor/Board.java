@@ -31,7 +31,7 @@ public class Board extends JPanel implements Runnable {
     private Map<Integer, Person> persons;
     private List<Sensor> sensors;
     private BufferedImage floorMap;
-    private final int DELAY = 50;
+    public int DELAY = 50;
 
     public Board(FloorTopComponent _parent) {
         parent = _parent;
