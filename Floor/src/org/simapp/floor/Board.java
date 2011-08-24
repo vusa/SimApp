@@ -78,11 +78,19 @@ public class Board extends JPanel implements Runnable {
         for (Person p : persons.values()) {
             p.move();
         }
-        
+
         int selectedId = ((Person) parent.dataSheet.combo.getSelectedItem()).getId();
         Person p = persons.get(selectedId);
-        parent.dataSheet.liveLbl.setText(p.getName() +" is along "+ p.currentPathWay.pathName.toUpperCase());
-        parent.dataSheet.liveLbl2.setText("Person ID: "+selectedId+" X = " + p.getX() + " and Y =" + p.getY());
+        parent.dataSheet.liveLbl.setText(p.getName() + " is along " + p.currentPathWay.pathName.toUpperCase());
+        parent.dataSheet.liveLbl2.setText("Person ID: " + selectedId + " X = " + p.getX() + " and Y =" + p.getY());
+        double delta1, delta2;
+        Sensor s1 = sensors.get(0);
+        delta1 = Math.sqrt(Math.pow((s1.getX() - p.getX()), 2) + Math.pow((s1.getY()-p.getY()), 2));
+        Sensor s2 = sensors.get(1);
+        delta2 = Math.sqrt(Math.pow((s2.getX() - p.getX()), 2) + Math.pow((s2.getY()-p.getY()), 2));
+        parent.dataSheet.liveLbl3.setText("Distance from sensor1: " +(int)delta1);
+        parent.dataSheet.liveLbl4.setText("Distance from sensor2: " +(int)delta2);
+
     }
 
     @Override
@@ -159,9 +167,9 @@ public class Board extends JPanel implements Runnable {
     private ComboBoxModel getComboModel() {
         return new DefaultComboBoxModel(persons.values().toArray());
     }
-    
-    private String getPersonName(int i){
-        String [] names = new String[]{"John", "James", "Sipho", "Kevin", "Mark", "Dudu", "Dumi", "Gugu", "Thembi", "Dan"};
-        return names[i%names.length];
+
+    private String getPersonName(int i) {
+        String[] names = new String[]{"John", "James", "Sipho", "Kevin", "Mark", "Dudu", "Dumi", "Gugu", "Thembi", "Dan"};
+        return names[i % names.length];
     }
 }
