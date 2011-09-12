@@ -138,6 +138,20 @@ public class Board extends JPanel implements Runnable {
         }
         parent.dataSheet.combo.setModel(getComboModel());
     }
+//private void initPersons() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+//        persons = new HashMap<Integer, Person>();
+//        Set<String> set = PATHWAYS.keySet();
+//        String[] pathNames = new String[set.size()];
+//        pathNames = set.toArray(pathNames);
+//        parent.dataSheet.setLayout(new BoxLayout(parent.dataSheet, BoxLayout.PAGE_AXIS));
+//        for (int i = 0; i < 10; i++) {
+//            persons.put(i, new Person(PATHWAYS.get(pathNames[(int) Math.floor(Math.random() * set.size())]), i, getPersonName(i)));
+//        }
+//        for(Person p:persons.values()){
+//            p.save(Database.getInstance());
+//        }
+//        parent.dataSheet.combo.setModel(getComboModel());
+//    }
 
     void initPathWays() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         PATHWAYS = new HashMap<String, PathWay>();
@@ -178,10 +192,10 @@ public class Board extends JPanel implements Runnable {
         return new DefaultComboBoxModel(persons.values().toArray());
     }
 
-//    private String getPersonName(int i) {
-//        String[] names = new String[]{"John", "James", "Sipho", "Kevin", "Mark", "Dudu", "Dumi", "Gugu", "Thembi", "Dan"};
-//        return names[i % names.length];
-//    }
+    private String getPersonName(int i) {
+        String[] names = new String[]{"John", "James", "Sipho", "Kevin", "Mark", "Dudu", "Dumi", "Gugu", "Thembi", "Dan"};
+        return names[i % names.length];
+    }
 
     public static void main(String[] args) {
 //        try {

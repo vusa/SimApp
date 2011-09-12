@@ -47,14 +47,14 @@ INSERT INTO pathway (name, startx, starty, endx, endy, joinatstart, joinatend, o
 INSERT INTO pathway (name, startx, starty, endx, endy, joinatstart, joinatend, orientation) VALUES ('h2', 90, 66, 476, 66, 'v2', 'v10', 'HORIZONTAL');
 
 
-INSERT INTO person (id, name, dirx, diry, pathway, lastx, lasty) VALUES (0, 'John', 1, 0, 'h8', 0, 0);
-INSERT INTO person (id, name, dirx, diry, pathway, lastx, lasty) VALUES (1, 'James', 0, -1, 'v1', 0, 0);
-INSERT INTO person (id, name, dirx, diry, pathway, lastx, lasty) VALUES (2, 'Sipho', 0, -1, 'v6', 0, 0);
-INSERT INTO person (id, name, dirx, diry, pathway, lastx, lasty) VALUES (3, 'Kevin', 0, 1, 'v6', 0, 0);
-INSERT INTO person (id, name, dirx, diry, pathway, lastx, lasty) VALUES (4, 'Mark', -1, 0, 'h2', 0, 0);
-INSERT INTO person (id, name, dirx, diry, pathway, lastx, lasty) VALUES (5, 'Dudu', 0, 1, 'v7', 0, 0);
-INSERT INTO person (id, name, dirx, diry, pathway, lastx, lasty) VALUES (6, 'Dumi', 0, 1, 'v10', 0, 0);
-INSERT INTO person (id, name, dirx, diry, pathway, lastx, lasty) VALUES (7, 'Gugu', -1, 0, 'h9', 0, 0);
-INSERT INTO person (id, name, dirx, diry, pathway, lastx, lasty) VALUES (8, 'Thembi', 1, 0, 'h7', 0, 0);
-INSERT INTO person (id, name, dirx, diry, pathway, lastx, lasty) VALUES (9, 'Dan', 1, 0, 'h4', 0, 0);
+INSERT INTO person (id, name, dirx, diry, pathway, lastx, lasty) VALUES (0, 'John', 0, -1, 'v3', 86, 361);
+INSERT INTO person (id, name, dirx, diry, pathway, lastx, lasty) VALUES (1, 'James', 0, 1, 'v2', 86, 31);
+INSERT INTO person (id, name, dirx, diry, pathway, lastx, lasty) VALUES (2, 'Sipho', -1, 0, 'h4', 76, 158);
+INSERT INTO person (id, name, dirx, diry, pathway, lastx, lasty) VALUES (3, 'Kevin', 0, 1, 'v3', 86, 433);
+INSERT INTO person (id, name, dirx, diry, pathway, lastx, lasty) VALUES (4, 'Mark', 0, 1, 'v3', 86, 386);
+INSERT INTO person (id, name, dirx, diry, pathway, lastx, lasty) VALUES (5, 'Dudu', 0, 1, 'v4', 150, 131);
+INSERT INTO person (id, name, dirx, diry, pathway, lastx, lasty) VALUES (6, 'Dumi', 1, 0, 'h7', 57, 350);
+INSERT INTO person (id, name, dirx, diry, pathway, lastx, lasty) VALUES (7, 'Gugu', -1, 0, 'h4', 469, 158);
+INSERT INTO person (id, name, dirx, diry, pathway, lastx, lasty) VALUES (8, 'Thembi', -1, 0, 'h10', 500, 446);
+INSERT INTO person (id, name, dirx, diry, pathway, lastx, lasty) VALUES (9, 'Dan', 0, 1, 'v2', 86, 18);
 

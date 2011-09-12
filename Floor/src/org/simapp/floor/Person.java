@@ -16,8 +16,6 @@ public class Person extends FloorItem {
     int dirY;
     private int id;
     private String name;
-    int lastX;
-    int lastY;
 
     public int getId() {
         return id;
@@ -146,9 +144,9 @@ public class Person extends FloorItem {
         sb.append(",");
         sb.append(dirY);
         sb.append(",");
-        sb.append(lastX);
+        sb.append(getX());
         sb.append(",");
-        sb.append(lastY);
+        sb.append(getY());
         sb.append(",");
         sb.append("'").append(currentPathWay.pathName).append("'");
         sb.append(")");
@@ -160,8 +158,8 @@ public class Person extends FloorItem {
         sb.append(" name='").append(name).append("'");
         sb.append(" dirx=").append(dirX);
         sb.append(" diry=").append(dirY);
-        sb.append(" lastx=").append(lastX);
-        sb.append(" lasty=").append(lastY);
+        sb.append(" lastx=").append(getX());
+        sb.append(" lasty=").append(getY());
         sb.append(" pathway='").append(currentPathWay.pathName).append("'");
         sb.append("where id=").append(id);
         sb.append(id);
@@ -179,9 +177,10 @@ public class Person extends FloorItem {
             p.name = (String) map.get("name");
             p.dirX = (Integer) map.get("dirx");
             p.dirY = (Integer) map.get("diry");
-            p.lastX = (Integer) map.get("lastx");
-            p.lastY = (Integer) map.get("lasty");
+            p.setX((Integer) map.get("lastx"));
+            p.setY((Integer) map.get("lasty"));
             p.currentPathWay = PathWay.get(db, (String) map.get("pathway"));
+            p.setImage(Constants.MOVING_OBJECT_IMAGE);
             return p;
         }
         return null;
@@ -198,9 +197,10 @@ public class Person extends FloorItem {
                 p.name = (String) map.get("name");
                 p.dirX = (Integer) map.get("dirx");
                 p.dirY = (Integer) map.get("diry");
-                p.lastX = (Integer) map.get("lastx");
-                p.lastY = (Integer) map.get("lasty");
+                p.setX((Integer) map.get("lastx"));
+                p.setY((Integer) map.get("lasty"));
                 p.currentPathWay = PathWay.get(db, (String) map.get("pathway"));
+                p.setImage(Constants.MOVING_OBJECT_IMAGE);
                 persons.add(p);
             }
         }
