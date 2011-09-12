@@ -6,9 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSetMetaData;
-import java.util.Hashtable;
-
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -20,28 +19,27 @@ public class Database {
     private Connection connection;
 
     private Database() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-
-        Class.forName("org.apache.derby.jdbc.EmbeddedDriver").newInstance();
+        Class.forName("org.postgresql.Driver").newInstance();
         connection = DriverManager.getConnection(getDbUrl());
     }
-    
-    public static Database getInstance() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException{
-        if(DATABASE==null){
+
+    public static Database getInstance() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+        if (DATABASE == null) {
             DATABASE = new Database();
         }
         return DATABASE;
     }
 
-    public void query(String sql) throws SQLException {
+    public void execute(String sql) throws SQLException {
         System.out.println(sql);
         Statement stmt = connection.createStatement();
         stmt.execute(sql);
         stmt.close();
     }
 
-    public Vector<Hashtable> select(String sql) throws SQLException {
+    public ArrayList<HashMap<String, Object>> query(String sql) throws SQLException {
         System.out.println(sql);
-        Vector<Hashtable> vector = new Vector<Hashtable>();
+        ArrayList<HashMap<String, Object>> vector = new ArrayList<HashMap<String, Object>>();
         Statement stmt = connection.createStatement();
         ResultSet results = stmt.executeQuery(sql);
         ResultSetMetaData rsmd = results.getMetaData();
@@ -50,7 +48,7 @@ public class Database {
 
         while (results.next()) {
             System.out.print(".");
-            Hashtable hash = new Hashtable();
+            HashMap<String, Object> hash = new HashMap<String, Object>();
             for (int i = 1; i <= numberCols; i++) {
                 hash.put(rsmd.getColumnLabel(i), results.getObject(i));
             }
@@ -62,11 +60,11 @@ public class Database {
     }
 
     public void close() throws SQLException {
-        DriverManager.getConnection(getDbUrl() + ";shutdown=true");
+        DriverManager.getConnection(getDbUrl());
         connection.close();
     }
 
     private String getDbUrl() {
-        return "jdbc:derby:laamu;create=true;";
+        return "jdbc:postgresql://localhost/simapp?user=postgres&password=postgres";
     }
 }

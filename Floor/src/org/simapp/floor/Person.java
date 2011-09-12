@@ -1,5 +1,10 @@
 package org.simapp.floor;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 /**
  *
  * @author vusa
@@ -11,9 +16,14 @@ public class Person extends FloorItem {
     int dirY;
     private int id;
     private String name;
+    int lastX;
+    int lastY;
 
     public int getId() {
         return id;
+    }
+
+    private Person() {
     }
 
     public Person(int x, int y) {
@@ -109,7 +119,7 @@ public class Person extends FloorItem {
 
     @Override
     public String toString() {
-        return name +" (Tag - " + id + ")";
+        return name + " (Tag - " + id + ")";
     }
 
     /**
@@ -124,5 +134,76 @@ public class Person extends FloorItem {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void save(Database db) throws SQLException {
+        StringBuilder sb = new StringBuilder("insert into person (id, name, dirx, diry, lastx, lasty, pathway) values(");
+        sb.append(id);
+        sb.append(",");
+        sb.append("'").append(name).append("'");
+        sb.append(",");
+        sb.append(dirX);
+        sb.append(",");
+        sb.append(dirY);
+        sb.append(",");
+        sb.append(lastX);
+        sb.append(",");
+        sb.append(lastY);
+        sb.append(",");
+        sb.append("'").append(currentPathWay.pathName).append("'");
+        sb.append(")");
+        db.execute(sb.toString());
+    }
+
+    public void update(Database db) throws SQLException {
+        StringBuilder sb = new StringBuilder("update person set ");
+        sb.append(" name='").append(name).append("'");
+        sb.append(" dirx=").append(dirX);
+        sb.append(" diry=").append(dirY);
+        sb.append(" lastx=").append(lastX);
+        sb.append(" lasty=").append(lastY);
+        sb.append(" pathway='").append(currentPathWay.pathName).append("'");
+        sb.append("where id=").append(id);
+        sb.append(id);
+        db.execute(sb.toString());
+    }
+
+    public static Person get(Database db, int id) throws SQLException {
+        StringBuilder sb = new StringBuilder("select * from person where id=");
+        sb.append(id);
+        ArrayList<HashMap<String, Object>> res = db.query(sb.toString());
+        if (res.size() == 1) {
+            HashMap map = res.get(0);
+            Person p = new Person();
+            p.id = (Integer) map.get("id");
+            p.name = (String) map.get("name");
+            p.dirX = (Integer) map.get("dirx");
+            p.dirY = (Integer) map.get("diry");
+            p.lastX = (Integer) map.get("lastx");
+            p.lastY = (Integer) map.get("lasty");
+            p.currentPathWay = PathWay.get(db, (String) map.get("pathway"));
+            return p;
+        }
+        return null;
+    }
+
+    public static List<Person> getAll(Database db) throws SQLException {
+        String sql = "select * from person";
+        List<Person> persons = new ArrayList<Person>();
+        ArrayList<HashMap<String, Object>> res = db.query(sql);
+        if (res.size() > 0) {
+            for (HashMap<String, Object> map : res) {
+                Person p = new Person();
+                p.id = (Integer) map.get("id");
+                p.name = (String) map.get("name");
+                p.dirX = (Integer) map.get("dirx");
+                p.dirY = (Integer) map.get("diry");
+                p.lastX = (Integer) map.get("lastx");
+                p.lastY = (Integer) map.get("lasty");
+                p.currentPathWay = PathWay.get(db, (String) map.get("pathway"));
+                persons.add(p);
+            }
+        }
+        return persons;
     }
 }

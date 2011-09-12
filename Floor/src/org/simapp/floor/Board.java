@@ -7,6 +7,7 @@ import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +18,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JPanel;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -28,7 +30,7 @@ public class Board extends JPanel implements Runnable {
     private FloorTopComponent parent;
     private Thread animator;
     public static Map<String, PathWay> PATHWAYS;
-    private Map<Integer, Person> persons;
+    Map<Integer, Person> persons;
     private List<Sensor> sensors;
     private BufferedImage floorMap;
     public int DELAY = 50;
@@ -40,13 +42,20 @@ public class Board extends JPanel implements Runnable {
         setDoubleBuffered(true);
         try {
             floorMap = ImageIO.read(new File("/home/vusa/Work/NetBeansProjects/SimApp/Floor/src/org/simapp/floor/" + Constants.FLOOR_MAP_IMAGE));
+            initPathWays();
+            initPersons();
+            initSensors();
+        } catch (SQLException ex) {
+            Exceptions.printStackTrace(ex);
+        } catch (ClassNotFoundException ex) {
+            Exceptions.printStackTrace(ex);
+        } catch (InstantiationException ex) {
+            Exceptions.printStackTrace(ex);
+        } catch (IllegalAccessException ex) {
+            Exceptions.printStackTrace(ex);
         } catch (IOException ioe) {
             throw new RuntimeException(Constants.FLOOR_MAP_IMAGE + " Not found");
         }
-        initPathWays();
-        initPersons();
-        initSensors();
-
     }
 
     @Override
@@ -85,11 +94,11 @@ public class Board extends JPanel implements Runnable {
         parent.dataSheet.liveLbl2.setText("Person ID: " + selectedId + " X = " + p.getX() + " and Y =" + p.getY());
         double delta1, delta2;
         Sensor s1 = sensors.get(0);
-        delta1 = Math.sqrt(Math.pow((s1.getX() - p.getX()), 2) + Math.pow((s1.getY()-p.getY()), 2));
+        delta1 = Math.sqrt(Math.pow((s1.getX() - p.getX()), 2) + Math.pow((s1.getY() - p.getY()), 2));
         Sensor s2 = sensors.get(1);
-        delta2 = Math.sqrt(Math.pow((s2.getX() - p.getX()), 2) + Math.pow((s2.getY()-p.getY()), 2));
-        parent.dataSheet.liveLbl3.setText("Distance from sensor1: " +(int)delta1);
-        parent.dataSheet.liveLbl4.setText("Distance from sensor2: " +(int)delta2);
+        delta2 = Math.sqrt(Math.pow((s2.getX() - p.getX()), 2) + Math.pow((s2.getY() - p.getY()), 2));
+        parent.dataSheet.liveLbl3.setText("Distance from sensor1: " + (int) delta1);
+        parent.dataSheet.liveLbl4.setText("Distance from sensor2: " + (int) delta2);
 
     }
 
@@ -116,26 +125,27 @@ public class Board extends JPanel implements Runnable {
             } catch (InterruptedException e) {
                 System.out.println("interrupted");
             }
-
             beforeTime = System.currentTimeMillis();
         }
     }
 
-    private void initPersons() {
+    void initPersons() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
         persons = new HashMap<Integer, Person>();
-        Set<String> set = PATHWAYS.keySet();
-        String[] pathNames = new String[set.size()];
-        pathNames = set.toArray(pathNames);
+        List<Person> pple = Person.getAll(Database.getInstance());
         parent.dataSheet.setLayout(new BoxLayout(parent.dataSheet, BoxLayout.PAGE_AXIS));
-        for (int i = 0; i < 10; i++) {
-            persons.put(i, new Person(PATHWAYS.get(pathNames[(int) Math.floor(Math.random() * set.size())]), i, getPersonName(i)));
+        for (Person p : pple) {
+            persons.put(p.getId(), p);
         }
         parent.dataSheet.combo.setModel(getComboModel());
     }
 
-    private void initPathWays() {
+    void initPathWays() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         PATHWAYS = new HashMap<String, PathWay>();
-        PATHWAYS.put("h1", new PathWay("h1", new Coordinates(30, 22), new Coordinates(606, 22), WayOrientation.HORIZONTAL, "v1", "v11"));
+        List<PathWay> pw = PathWay.getAll(Database.getInstance());
+        for (PathWay p : pw) {
+            PATHWAYS.put(p.pathName, p);
+        }
+        /*      PATHWAYS.put("h1", new PathWay("h1", new Coordinates(30, 22), new Coordinates(606, 22), WayOrientation.HORIZONTAL, "v1", "v11"));
         PATHWAYS.put("h2", new PathWay("h2", new Coordinates(94, 70), new Coordinates(480, 70), WayOrientation.HORIZONTAL, "v2", "v10"));
         PATHWAYS.put("h3", new PathWay("h3", new Coordinates(158, 118), new Coordinates(480, 118), WayOrientation.HORIZONTAL, "v4", "v10"));
         PATHWAYS.put("h4", new PathWay("h4", new Coordinates(30, 166), new Coordinates(606, 166), WayOrientation.HORIZONTAL, "v1", "v11"));
@@ -156,7 +166,7 @@ public class Board extends JPanel implements Runnable {
         PATHWAYS.put("v9", new PathWay("v9", new Coordinates(415, 166), new Coordinates(415, 454), WayOrientation.VERTICAL, "h4", "h10"));
         PATHWAYS.put("v10", new PathWay("v10", new Coordinates(480, 22), new Coordinates(480, 166), WayOrientation.VERTICAL, "h1", "h4"));
         PATHWAYS.put("v11", new PathWay("v11", new Coordinates(606, 22), new Coordinates(606, 454), WayOrientation.VERTICAL, "h1", "h10"));
-    }
+         */    }
 
     private void initSensors() {
         sensors = new ArrayList<Sensor>();
@@ -168,8 +178,31 @@ public class Board extends JPanel implements Runnable {
         return new DefaultComboBoxModel(persons.values().toArray());
     }
 
-    private String getPersonName(int i) {
-        String[] names = new String[]{"John", "James", "Sipho", "Kevin", "Mark", "Dudu", "Dumi", "Gugu", "Thembi", "Dan"};
-        return names[i % names.length];
+//    private String getPersonName(int i) {
+//        String[] names = new String[]{"John", "James", "Sipho", "Kevin", "Mark", "Dudu", "Dumi", "Gugu", "Thembi", "Dan"};
+//        return names[i % names.length];
+//    }
+
+    public static void main(String[] args) {
+//        try {
+//            //Board b = new Board();
+//            b.initPathWays();
+//            Database db = Database.getInstance();
+//            for (PathWay p : PATHWAYS.values()) {
+//                p.save(db);
+//            }
+//            b.initPersons();
+//            for (Person per : b.persons.values()) {
+//                per.save(db);
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            Exceptions.printStackTrace(ex);
+//        } catch (SQLException ex) {
+//            Exceptions.printStackTrace(ex);
+//        } catch (InstantiationException ex) {
+//            Exceptions.printStackTrace(ex);
+//        } catch (IllegalAccessException ex) {
+//            Exceptions.printStackTrace(ex);
+//        }
     }
 }
